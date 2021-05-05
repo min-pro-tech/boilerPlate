@@ -12,12 +12,12 @@ const db = mysql.createConnection({
 });
 
 //register form
-router.get('/', function(req,res){
+router.get('/', (req,res)=>{
 	res.send('test');
 })
 
 //register
-router.post('/register', function(req,res){
+router.post('/register', (req,res)=>{
 	var id = req.body.id;
 	var queryData = "SELECT * FROM user_info WHERE userID = ?";
 	
@@ -53,11 +53,15 @@ router.post('/register', function(req,res){
 	
 })
 
-//정보 조회
+//정보 조회 url query에서 id를 받아옴
 router.get('/see', (req,res)=>{
-	var userID = req.query.id;
-	var queryData = "SELECT * FROM user_info WHERE userID = ?";
-	db.query(queryData, [userID], (err, rows)=>{
+	var userID = req.query.id||null;
+	var queryData = "SELECT userID, nickname,email,name,age FROM user_info WHERE userID = ?";
+	if(userID == null){
+		res.sendStatus(404);
+	}
+	else{
+		db.query(queryData, [userID], (err, rows)=>{
 		if(err){
 			console.log(err);
 		}
@@ -76,13 +80,77 @@ router.get('/see', (req,res)=>{
 				res.send(strUser);	
 			}
 			else{
-				res.send('아이디를 찾을 수 없습니다.');
+				res.send("계정을 찾을 수 없습니다.");
 			}
 		}
 		
 	})
+	}
+	
 })
 
-//정보 일부 수정(나중에 구현)
+//정보 일부 수정
+router.patch('/revice', (req,res)=>{
+	var queryData = "SELECT * FROM user_info WHERE userID=?";
+	var userid = req.query.id;
+	if(userid==null){
+		res.sendStatus(404);
+	}
+	else{
+		db.query(queryData, [userid], (err, rows)=>{
+		if(err){
+			console.log(err);
+		}
+		else{
+			if(rows.length){
+				var user = {
+					pw : req.body.pw||rows[0].password,
+					nickname: req.body.nickname||rows[0].nickname,
+					email:req.body.email||rows[0].email,
+					name:req.body.name||rows[0].name,
+					age:req.body.age||rows[0].age
+				}
+				var paramData = [user.pw, user.nickname, user.email, user.name, user.age];
+				
+				queryData = "UPDATE user_info SET password=?, nickname=?,email =?,name=?,age=?";
+			
+				db.query(queryData, paramData, (err,rows)=>{
+					if(err){
+						console.log(err);
+						res.sendStatus(500);
+					}
+					else{
+						res.sendStatus(200);
+					}
+					
+				})
+				
+			}
+			else{
+				res.sendStatus(404);
+			}
+		}
+	})
+	}
+})
 
+//유저 삭제
+router.delete('/deluser', (req,res)=>{
+	var userid = req.query.id;
+	if(userid ==null){
+		res.sendStatus(404);
+	}
+	else{
+		var queryData = 'DELETE FROM user_info WHERE userID=?';
+		db.query(queryData, [userid], (err,rows)=>{
+			if(err){
+				console.log(err);
+			}
+			else{
+				res.sendStatus(200);
+			}
+		})
+	}
+	
+})
 module.exports = router;
