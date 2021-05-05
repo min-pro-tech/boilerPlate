@@ -83,6 +83,6 @@ router.get('/see', (req,res)=>{
 	})
 })
 
-//정보 일부 수정
+//정보 일부 수정(나중에 구현)
 
 module.exports = router;
