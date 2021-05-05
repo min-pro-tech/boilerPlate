@@ -22,6 +22,7 @@ passport.deserializeUser(function(nickname, done) {
 });
 
 
+//local strategy
 passport.use('local-join', new LocalStrategy({usernameField: 'id', passwordField: 'pw'},
   function(username, pw, done) {
     var queryData = "SELECT userID, password, nickname FROM user_info WHERE userId = ?";
@@ -56,20 +57,23 @@ passport.use('local-join', new LocalStrategy({usernameField: 'id', passwordField
 
 
 //login form
-
 router.get('/', (req,res)=>{
 	res.send('<<login form>>');
 })
 
 
-//login 시도
-router.post('/', passport.authenticate('local-join', 
+//local-login 시도
+router.post('/locallogin', passport.authenticate('local-join', 
 					{ successRedirect: '/',
 					failureRedirect: '/login',
 					falilureFlash: true}
 ));
 
-
+//logout
+router.post('/logout', function(req, res){
+  req.logout();
+  res.redirect('/');
+});
 
 
 
