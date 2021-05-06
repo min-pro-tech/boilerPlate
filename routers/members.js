@@ -90,7 +90,7 @@ router.get('/see', (req,res)=>{
 })
 
 //정보 일부 수정
-router.patch('/revice', (req,res)=>{
+router.put('/revice', (req,res)=>{
 	var queryData = "SELECT * FROM user_info WHERE userID=?";
 	var userid = req.query.id;
 	if(userid==null){

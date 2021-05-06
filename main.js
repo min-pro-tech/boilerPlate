@@ -9,8 +9,10 @@ const passport = require('passport');
 const portNum = 3000;
 
 const pw = require('./secret/passwords');
+
 const membersRouter = require('./routers/members');
 const loginRouter = require('./routers/login');
+const docuRouter = require('./routers/documents');
 
 const app = express();
 
@@ -38,6 +40,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.use('/members', membersRouter);
 app.use('/login', loginRouter);
+app.use('/posting', docuRouter);
 
 app.get('/', (req,res)=>{
 	res.send('main_page');
