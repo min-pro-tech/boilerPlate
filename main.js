@@ -6,9 +6,9 @@ const mysqlStore = require('express-mysql-session')(session);
 const passport = require('passport');
 
 
-const portNum = 3000;
+const portNum = process.env.PORT_NUM||3000;
 
-const pw = require('./secret/passwords');
+const pw = require('./config/passwords');
 
 const membersRouter = require('./routers/members');
 const loginRouter = require('./routers/login');

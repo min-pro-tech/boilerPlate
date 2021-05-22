@@ -1,0 +1,7 @@
+
+/*tables*/
+/* user_info
+	userID, password, nickname, email, name, age*/
+
+/* doc_info
+	docID, title, userID(실제로는 닉네임), description, datetime*/

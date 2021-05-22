@@ -1,6 +1,6 @@
 const express = require('express');
 const mysql = require('mysql');
-const pw = require('../secret/passwords.js');
+const pw = require('../config/passwords.js');
 
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
